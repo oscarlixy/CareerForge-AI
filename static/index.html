@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerForge AI - Complete Career Platform</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        /* Previous CSS styles remain the same */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .tabs {
+            display: flex;
+            background: var(--background);
+            border-bottom: 1px solid #e2e8f0;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            padding: 20px 30px;
+            background: none;
+            border: none;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-button:hover {
+            color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .tab-button.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 40px;
+            min-height: 600px;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-section {
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .form-section h3 {
+            margin-bottom: 20px;
+            color: var(--primary);
+            font-size: 1.3em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .output-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .output-box {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 25px;
+            min-height: 400px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .output-box h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .resume-content {
+            line-height: 1.6;
+        }
+
+        .resume-content h1 {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .match-score {
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--success), #34d399);
+            color: white;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .question-item {
+            background: #f8fafc;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .skill-category {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f0f9ff;
+            border-radius: 10px;
+        }
+
+        .salary-breakdown {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .salary-item {
+            text-align: center;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 10px;
+        }
+
+        .salary-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .form-grid, .output-grid {
+                grid-template-columns: 1fr;
+            }
+            .salary-breakdown {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 CareerForge AI</h1>
+            <p>Your All-in-One Intelligent Career Platform</p>
+            
+            <!-- API Configuration -->
+            <div style="margin-top: 25px; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; max-width: 700px; margin-left: auto; margin-right: auto;">
+                <div style="font-size: 0.95em; opacity: 0.95; line-height: 1.5; text-align: center;">
+                    💡 This platform is powered by AI. All features are now active.
+                    <span id="api-status" style="font-size: 1.2em; margin-left: 10px;">⚪</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab('resume-tab')">🎯 Smart Resume</button>
+            <button class="tab-button" onclick="openTab('interview-tab')">💼 Interview Coach</button>
+            <button class="tab-button" onclick="openTab('skills-tab')">📚 Learning Path</button>
+            <button class="tab-button" onclick="openTab('coverletter-tab')">✉️ Cover Letters</button>
+            <button class="tab-button" onclick="openTab('linkedin-tab')">💼 LinkedIn</button>
+            <button class="tab-button" onclick="openTab('salary-tab')">💰 Salary Intel</button>
+        </div>
+
+        <!-- Resume Optimizer Tab -->
+        <div id="resume-tab" class="tab-content active">
+            <div class="form-grid">
+                <div class="form-section">
+                    <h3>👤 Your Profile</h3>
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="current-role">Current Role</label>
+                        <input type="text" id="current-role" placeholder="Software Developer">
+                    </div>
+                    <div class="form-group">
+                        <label for="experience">Years of Experience</label>
+                        <input type="number" id="experience" placeholder="5">
+                    </div>
+                    <div class="form-group">
+                        <label for="skills">Skills (comma separated)</label>
+                        <textarea id="skills" placeholder="Python, Project Management, Data Analysis..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>🎯 Target Opportunity</h3>
+                    <div class="form-group">
+                        <label for="job-title">Desired Job Title</label>
+                        <input type="text" id="job-title" placeholder="Senior Software Engineer">
+                    </div>
+                    <div class="form-group">
+                        <label for="job-description">Job Description</label>
+                        <textarea id="job-description" placeholder="Paste the job description here..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="company-name">Company Name</label>
+                        <input type="text" id="company-name" placeholder="Tech Company Inc.">
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="generateResume()">🚀 Generate Optimized Resume</button>
+
+            <div class="output-grid">
+                <div class="output-box">
+                    <h3>📄 AI-Optimized Resume</h3>
+                    <div id="resume-output" class="resume-content"></div>
+                </div>
+                <div class="output-box">
+                    <h3>📊 Matching Analysis</h3>
+                    <div id="analysis-output"></div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-success" onclick="exportToPDF()">📥 Export as PDF</button>
+                <button class="btn btn-secondary" onclick="copyToClipboard('resume-output')">📋 Copy Text</button>
+            </div>
+        </div>
+
+        <!-- Interview Coach Tab -->
+        <div id="interview-tab" class="tab-content">
+            <div class="form-grid">
+                <div class="form-section">
+                    <h3>🎯 Interview Setup</h3>
+                    <div class="form-group">
+                        <label for="interview-role">Target Role</label>
+                        <input type="text" id="interview-role" placeholder="Senior Developer">
+                    </div>
+                    <div class="form-group">
+                        <label for="interview-level">Experience Level</label>
+                        <select id="interview-level">
+                            <option value="entry">Entry Level</option>
+                            <option value="mid">Mid Level</option>
+                            <option value="senior">Senior Level</option>
+                            <option value="lead">Lead/Manager</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="interview-skills">Key Skills to Test</label>
+                        <textarea id="interview-skills" placeholder="Python, System Design, Leadership..."></textarea>
+                    </div>
+                    <button class="btn btn-primary" onclick="generateInterviewQuestions()">🎯 Generate Questions</button>
+                </div>
+
+                <div class="form-section">
+                    <h3>💡 Interview Results</h3>
+                    <div id="interview-output"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Learning Path Tab -->
+        <div id="skills-tab" class="tab-content">
+            <div class="form-grid">
+                <div class="form-section">
+                    <h3>📚 Skill Assessment</h3>
+                    <div class="form-group">
+                        <label for="current-skills">Current Skills</label>
+                        <textarea id="current-skills" placeholder="List your current skills..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="target-role-learning">Target Role</label>
+                        <input type="text" id="target-role-learning" placeholder="AI Engineer">
+                    </div>
+                    <div class="form-group">
+                        <label for="timeline">Learning Timeline</label>
+                        <select id="timeline">
+                            <option value="3">3 months</option>
+                            <option value="6">6 months</option>
+                            <option value="12">1 year</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="generateLearningPath()">🛠️ Create Learning Path</button>
+                </div>
+
+                <div class="form-section">
+                    <h3>🎯 Personalized Roadmap</h3>
+                    <div id="learning-output"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cover Letter Tab -->
+        <div id="coverletter-tab" class="tab-content">
+            <div class="form-grid">
+                <div class="form-section">
+                    <h3>✉️ Letter Details</h3>
+                    <div class="form-group">
+                        <label for="cl-company">Company Name</label>
+                        <input type="text" id="cl-company" placeholder="Tech Innovations Inc.">
+                    </div>
+                    <div class="form-group">
+                        <label for="cl-role">Job Title</label>
+                        <input type="text" id="cl-role" placeholder="Senior Developer">
+                    </div>
+                    <div class="form-group">
+                        <label for="cl-highlight">Key Achievement to Highlight</label>
+                        <textarea id="cl-highlight" placeholder="Describe your most relevant achievement..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="cl-tone">Writing Tone</label>
+                        <select id="cl-tone">
+                            <option value="professional">Professional</option>
+                            <option value="enthusiastic">Enthusiastic</option>
+                            <option value="formal">Formal</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="generateCoverLetter()">✨ Generate Cover Letter</button>
+                </div>
+
+                <div class="form-section">
+                    <h3>📝 Custom Cover Letter</h3>
+                    <div id="coverletter-output"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LinkedIn Optimizer Tab -->
+        <div id="linkedin-tab" class="tab-content">
+            <div class="form-grid">
+                <div class="form-section">
+                    <h3>💼 Profile Information</h3>
+                    <div class="form-group">
+                        <label for="li-headline">Current Headline</label>
+                        <input type="text" id="li-headline" placeholder="Software Developer at Current Company">
+                    </div>
+                    <div class="form-group">
+                        <label for="li-about">Current About Section</label>
+                        <textarea id="li-about" placeholder="Your current LinkedIn summary..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="li-target">Target Industry/Roles</label>
+                        <input type="text" id="li-target" placeholder="AI Engineering, Tech Leadership">
+                    </div>
+                    <button class="btn btn-primary" onclick="optimizeLinkedIn()">🚀 Optimize Profile</button>
+                </div>
+
+                <div class="form-section">
+                    <h3>🎯 Optimized Results</h3>
+                    <div id="linkedin-output"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Salary Intelligence Tab -->
+        <div id="salary-tab" class="tab-content">
+            <div class="form-grid">
+                <div class="form-section">
+                    <h3>💰 Salary Research</h3>
+                    <div class="form-group">
+                        <label for="salary-role">Job Title</label>
+                        <input type="text" id="salary-role" placeholder="Senior Software Engineer">
+                    </div>
+                    <div class="form-group">
+                        <label for="salary-location">Location</label>
+                        <input type="text" id="salary-location" placeholder="San Francisco, CA or Remote">
+                    </div>
+                    <div class="form-group">
+                        <label for="salary-experience">Years of Experience</label>
+                        <input type="number" id="salary-experience" placeholder="5">
+                    </div>
+                    <div class="form-group">
+                        <label for="salary-company">Company Size</label>
+                        <select id="salary-company">
+                            <option value="startup">Startup (1-50)</option>
+                            <option value="small">Small (51-200)</option>
+                            <option value="medium">Medium (201-1000)</option>
+                            <option value="large">Large (1001-5000)</option>
+                            <option value="enterprise">Enterprise (5000+)</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="analyzeSalary()">💡 Get Salary Insights</button>
+                </div>
+
+                <div class="form-section">
+                    <h3>📊 Market Intelligence</h3>
+                    <div id="salary-output"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Career Database - Real data for all functionalities
+        const careerDatabase = {
+            skillsRoadmaps: {
+                'AI Engineer': {
+                    foundation: ['Python Programming', 'Linear Algebra', 'Statistics & Probability', 'Data Structures'],
+                    intermediate: ['Machine Learning Fundamentals', 'Deep Learning', 'Data Preprocessing', 'Model Evaluation'],
+                    advanced: ['Neural Networks', 'Natural Language Processing', 'Computer Vision', 'Reinforcement Learning'],
+                    tools: ['TensorFlow', 'PyTorch', 'scikit-learn', 'Keras', 'OpenCV'],
+                    projects: ['Sentiment Analysis Model', 'Image Classification System', 'Recommendation Engine']
+                },
+                'Full Stack Developer': {
+                    foundation: ['HTML/CSS/JavaScript', 'Git Version Control', 'Basic Algorithms', 'Responsive Design'],
+                    intermediate: ['React/Vue.js', 'Node.js/Express', 'Database Design', 'RESTful APIs'],
+                    advanced: ['System Design', 'DevOps & CI/CD', 'Cloud Services (AWS/Azure)', 'Microservices'],
+                    tools: ['Docker', 'MongoDB/PostgreSQL', 'AWS Services', 'Jenkins'],
+                    projects: ['E-commerce Platform', 'Social Media App', 'Real-time Chat Application']
+                },
+                'Data Scientist': {
+                    foundation: ['Python/R Programming', 'SQL Databases', 'Statistics', 'Data Visualization'],
+                    intermediate: ['Machine Learning', 'Experimental Design', 'Feature Engineering', 'Data Wrangling'],
+                    advanced: ['Big Data Technologies', 'Advanced ML Models', 'Business Intelligence', 'MLOps'],
+                    tools: ['Pandas/NumPy', 'Tableau/PowerBI', 'Apache Spark', 'Jupyter Notebooks'],
+                    projects: ['Predictive Analytics Model', 'Customer Segmentation', 'Sales Forecasting']
+                },
+                'Product Manager': {
+                    foundation: ['Market Research', 'User Stories', 'Agile Methodology', 'Basic Analytics'],
+                    intermediate: ['Product Strategy', 'Roadmap Planning', 'Stakeholder Management', 'A/B Testing'],
+                    advanced: ['Go-to-Market Strategy', 'Product Metrics', 'Team Leadership', 'Business Case Development'],
+                    tools: ['Jira/Asana', 'Figma', 'Google Analytics', 'SQL for PMs'],
+                    projects: ['Product Launch Plan', 'Feature Prioritization Framework', 'User Research Report']
+                }
+            },
+
+            interviewQuestions: {
+                technical: {
+                    entry: [
+                        "Explain the difference between let, const, and var in JavaScript",
+                        "What is a REST API and how does it work?",
+                        "Describe your experience with version control systems like Git",
+                        "How would you approach debugging a software issue?"
+                    ],
+                    mid: [
+                        "Explain system design principles for a scalable application",
+                        "How do you ensure code quality and maintainability?",
+                        "Describe your experience with database optimization",
+                        "What's your approach to testing and test-driven development?"
+                    ],
+                    senior: [
+                        "Design a system that handles 1 million concurrent users",
+                        "How do you mentor junior developers and improve team processes?",
+                        "Explain your strategy for technical debt management",
+                        "Describe a complex technical challenge you solved and your approach"
+                    ],
+                    lead: [
+                        "How do you align technical strategy with business goals?",
+                        "Describe your experience building and leading engineering teams",
+                        "What's your approach to incident management and post-mortems?",
+                        "How do you handle technical disagreements within your team?"
+                    ]
+                },
+                behavioral: [
+                    "Tell me about a time you faced a significant challenge and how you overcame it",
+                    "Describe a situation where you had to work with a difficult team member",
+                    "How do you handle tight deadlines and competing priorities?",
+                    "Share an example of a project failure and what you learned from it"
+                ]
+            },
+
+            salaryData: {
+                'Software Engineer': { base: 120000, bonus: 0.15, equity: 0.10 },
+                'Senior Software Engineer': { base: 150000, bonus: 0.20, equity: 0.15 },
+                'Data Scientist': { base: 130000, bonus: 0.15, equity: 0.12 },
+                'AI Engineer': { base: 160000, bonus: 0.20, equity: 0.18 },
+                'Product Manager': { base: 140000, bonus: 0.25, equity: 0.15 },
+                'Full Stack Developer': { base: 125000, bonus: 0.15, equity: 0.10 }
+            },
+
+            locationMultipliers: {
+                'San Francisco, CA': 1.4,
+                'New York, NY': 1.35,
+                'Seattle, WA': 1.25,
+                'Boston, MA': 1.2,
+                'Austin, TX': 1.1,
+                'Remote': 0.95,
+                'Default': 1.0
+            },
+
+            companyMultipliers: {
+                'startup': { base: 0.9, equity: 2.0 },
+                'small': { base: 1.0, equity: 1.5 },
+                'medium': { base: 1.1, equity: 1.2 },
+                'large': { base: 1.2, equity: 1.0 },
+                'enterprise': { base: 1.3, equity: 0.8 }
+            }
+        };
+
+        // Tab navigation
+        function openTab(tabName) {
+            const tabContents = document.getElementsByClassName('tab-content');
+            const tabButtons = document.getElementsByClassName('tab-button');
+            
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+                tabButtons[i].classList.remove('active');
+            }
+
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // 1. RESUME OPTIMIZER - ACTUAL FUNCTIONALITY
+        async function generateResume() {
+            const name = document.getElementById('name').value || 'Your Name';
+            const currentRole = document.getElementById('current-role').value || 'Professional';
+            const experience = document.getElementById('experience').value || '3';
+            const skills = document.getElementById('skills').value || 'Various skills';
+            const jobTitle = document.getElementById('job-title').value || 'Target Role';
+            const company = document.getElementById('company-name').value || 'Target Company';
+            const jobDescription = document.getElementById('job-description').value;
+
+            // Show loading state
+            const resumeOutput = document.getElementById('resume-output');
+            const analysisOutput = document.getElementById('analysis-output');
+            resumeOutput.innerHTML = '<p>🚀 Generating AI-Optimized Resume...</p>';
+            analysisOutput.innerHTML = '<p>📊 Analyzing your profile against the job...</p>';
+
+            // Construct the prompt for the LLM
+            const prompt = `Based on the following information, generate an optimized resume and a matching analysis:
+
+**User Profile:**
+- Name: ${name}
+- Current Position: ${currentRole}
+- Years of Experience: ${experience} years
+- Skills: ${skills}
+
+**Target Position:**
+- Job Title: ${jobTitle}
+- Company Name: ${company}
+- Job Description: ${jobDescription}
+
+Please return a JSON object strictly containing two keys:
+1. "resume" - The complete resume content (in HTML format), including:
+   - Professional Summary (highlighting the match with the position)
+   - Core Skills (sorted by importance)
+   - Work Experience (can generate examples based on common experience, emphasizing achievements relevant to the target position)
+   - Education
+
+2. "analysis" - The matching analysis (in HTML format), including:
+   - A match score (0-100%) displayed in a styled div
+   - A list of matched skills
+   - 3-5 specific suggestions for improvement
+
+JSON format example:
+{
+  "resume": "<h1>Name</h1><h2>Professional Summary</h2><p>...</p>",
+  "analysis": "<div class='match-score' style='...'>85%</div><h3>Matched Skills</h3>..."
+}`;
+
+            const systemPrompt = 'You are a professional career consultant and resume expert. Please strictly follow the JSON format for the response, ensuring the HTML is well-formed and professional.';
+
+            try {
+                // Call the LLM API
+                const aiReply = await callLLM(prompt, systemPrompt);
+                const llmResponse = parseAIResponse(aiReply);
+                
+                if (llmResponse && llmResponse.resume && llmResponse.analysis) {
+                    resumeOutput.innerHTML = llmResponse.resume;
+                    analysisOutput.innerHTML = llmResponse.analysis;
+                } else {
+                    // 如果解析失败，直接显示 AI 的回复
+                    resumeOutput.innerHTML = `<div style="line-height: 1.6;">${aiReply.replace(/\n/g, '<br>')}</div>`;
+                    analysisOutput.innerHTML = '<p>✅ Resume generated (format may need adjustment)</p>';
+                }
+            } catch (error) {
+                resumeOutput.innerHTML = '<p style="color: red;">❌ Generation failed, please check API configuration</p>';
+                analysisOutput.innerHTML = '<p style="color: red;">❌ Generation failed</p>';
+            }
+        }
+
+        // 2. INTERVIEW COACH - AI-POWERED FUNCTIONALITY
+        async function generateInterviewQuestions() {
+            const role = document.getElementById('interview-role').value || 'Developer';
+            const level = document.getElementById('interview-level').value;
+            const skills = document.getElementById('interview-skills').value || 'Relevant Skills';
+
+            const levelText = {
+                'entry': 'Entry Level',
+                'mid': 'Mid Level', 
+                'senior': 'Senior Level',
+                'lead': 'Lead/Manager'
+            }[level];
+
+            const outputDiv = document.getElementById('interview-output');
+            outputDiv.innerHTML = '<p>🤔 AI is generating customized interview questions for you...</p>';
+
+            const prompt = `As a senior interviewer and career consultant, generate comprehensive interview preparation materials for the following position:
+
+**Position Information:**
+- Position: ${role}
+- Level: ${levelText}
+- Key Skills: ${skills}
+
+Please generate the following content (using HTML format):
+
+1. **Technical Interview Questions** (8-10 questions)
+   - Technical depth appropriate for the position level
+   - Covering the listed key skills
+   - Including system design, algorithms, best practices, etc.
+
+2. **Behavioral Interview Questions** (5-6 questions)
+   - Questions suitable for the STAR method
+   - Targeting leadership/collaboration skills for this level
+   - Scenarios for conflict resolution and challenges
+
+3. **For each question, provide:**
+   - The question itself
+   - The competencies the interviewer wants to assess
+   - Answering strategy/key points (brief)
+
+4. **Interview Preparation Advice**
+   - Key preparation points for this position
+   - Explanation of the STAR method
+   - 3-5 practical tips
+
+Please use the following HTML structure:
+- Use <div class="skill-category"> to wrap each major category
+- Use <div class="question-item"> to wrap each question
+- Use <div class="tips"> to wrap preparation advice`;
+
+            const systemPrompt = 'You are an experienced interviewer and career mentor, skilled at designing in-depth interview questions. Please provide practical, professional interview preparation materials.';
+
+            try {
+                const aiReply = await callLLM(prompt, systemPrompt);
+                // 直接使用 AI 返回的 HTML
+                outputDiv.innerHTML = aiReply;
+            } catch (error) {
+                outputDiv.innerHTML = '<p style="color: red;">❌ Generation failed, please check API configuration</p>';
+            }
+        }
+
+        // 3. LEARNING PATH - AI-POWERED FUNCTIONALITY
+        async function generateLearningPath() {
+            const currentSkills = document.getElementById('current-skills').value || 'Basic Skills';
+            const targetRole = document.getElementById('target-role-learning').value || 'Full Stack Developer';
+            const timeline = parseInt(document.getElementById('timeline').value);
+
+            const outputDiv = document.getElementById('learning-output');
+            outputDiv.innerHTML = '<p>📚 AI is planning a personalized learning path for you...</p>';
+
+            const prompt = `As a senior career mentor and skill development expert, create a detailed learning path for the following situation:
+
+**Current Status:**
+- Existing Skills: ${currentSkills}
+- Target Position: ${targetRole}
+- Learning Timeline: ${timeline} months
+
+Please generate a detailed learning path plan (in HTML format), including:
+
+1. **Skill Gap Analysis**
+   - Skills already possessed (mark with ✅)
+   - Skills that need to be learned (mark with 📚)
+   - Prioritization of skills
+
+2. **Phased Learning Plan**
+   Divided into 3 phases over ${timeline} months:
+   - **Foundation Phase** (first ${Math.floor(timeline/3)} months): Essential basic knowledge and tools
+   - **Intermediate Phase** (middle ${Math.floor(timeline/3)} months): Deepening core skills
+   - **Advanced Phase** (last ${Math.ceil(timeline/3)} months): Advanced skills and project practice
+   
+   Each phase includes:
+   - Specific learning content
+   - Recommended types of learning resources
+   - Time allocation suggestions
+
+3. **Practical Project Suggestions**
+   - 3-5 progressive projects
+   - Skill application points for each project
+   - Increasing project difficulty
+
+4. **Learning Resource Recommendations**
+   - Online course platforms
+   - Book recommendations
+   - Practice platforms
+
+5. **Weekly Learning Plan**
+   - Suggested weekly study hours
+   - Learning methods (theory vs. practice ratio)
+   - Milestone checkpoints
+
+Please use the following HTML structure:
+- <div class="skill-category"> to wrap each learning phase
+- Use colored divs to mark skill status: #d1fae5 for mastered, #fef3c7 for to-learn
+- <div class="tips"> to wrap learning advice and resources`;
+
+            const systemPrompt = 'You are an experienced career mentor and learning planner, skilled at creating personalized, actionable learning paths. Please ensure the advice is specific and actionable.';
+
+            try {
+                const aiReply = await callLLM(prompt, systemPrompt);
+                outputDiv.innerHTML = aiReply;
+            } catch (error) {
+                outputDiv.innerHTML = '<p style="color: red;">❌ Generation failed, please check API configuration</p>';
+            }
+        }
+
+        // 4. COVER LETTER GENERATOR - AI-POWERED FUNCTIONALITY
+        async function generateCoverLetter() {
+            const company = document.getElementById('cl-company').value || 'Target Company';
+            const role = document.getElementById('cl-role').value || 'Target Role';
+            const achievement = document.getElementById('cl-highlight').value || 'My work experience and achievements';
+            const tone = document.getElementById('cl-tone').value;
+
+            const toneText = {
+                'professional': 'Professional',
+                'enthusiastic': 'Enthusiastic',
+                'formal': 'Formal'
+            }[tone];
+
+            const outputDiv = document.getElementById('coverletter-output');
+            outputDiv.innerHTML = '<p>✍️ AI is writing a personalized cover letter for you...</p>';
+
+            const prompt = `As a professional cover letter writing expert, write a high-quality cover letter for the following job application scenario:
+
+**Application Information:**
+- Target Company: ${company}
+- Position Applied For: ${role}
+- Core Achievement: ${achievement}
+- Writing Style: ${toneText}
+
+Please generate a complete cover letter (in HTML format), including:
+
+1. **Salutation** (choose an appropriate opening based on the style)
+
+2. **Opening Paragraph**
+   - Express interest in the position
+   - Briefly explain why you are applying
+   - Reflect the ${toneText} style
+
+3. **Body Paragraphs** (2-3 paragraphs)
+   - First paragraph: Elaborate on the core achievement, supported by specific data and results
+   - Second paragraph: Explain why you are a good fit for ${company} and ${role}
+   - Third paragraph (optional): Show your knowledge and appreciation of the company
+
+4. **Closing Paragraph**
+   - Reiterate your interest and value
+   - Politely request an interview opportunity
+   - Thank the reader
+
+5. **Signature**
+   - Include a polite closing
+   - Placeholders for [Name], [Phone], [Email]
+
+6. **Customization Suggestions**
+   After the cover letter, add a <div class="tips"> containing 3-5 specific optimization suggestions
+
+Note:
+- Use <p> tags for paragraphs
+- Line height 1.8, font Arial
+- Maintain a consistent ${toneText} tone
+- Avoid being too generic, be as specific as possible
+- Keep the length moderate (300-400 words)`;
+
+            const systemPrompt = 'You are an experienced career consultant and expert cover letter writer. Please write a professional, persuasive, and personalized cover letter.';
+
+            try {
+                const aiReply = await callLLM(prompt, systemPrompt);
+                outputDiv.innerHTML = aiReply;
+            } catch (error) {
+                outputDiv.innerHTML = '<p style="color: red;">❌ Generation failed, please check API configuration</p>';
+            }
+        }
+
+        // 5. LINKEDIN OPTIMIZER - AI-POWERED FUNCTIONALITY
+        async function optimizeLinkedIn() {
+            const headline = document.getElementById('li-headline').value || 'Current Professional';
+            const about = document.getElementById('li-about').value || 'Experienced professional seeking new opportunities';
+            const target = document.getElementById('li-target').value || 'Technology field';
+
+            const outputDiv = document.getElementById('linkedin-output');
+            outputDiv.innerHTML = '<p>💼 AI is optimizing your LinkedIn profile...</p>';
+
+            const prompt = `As a LinkedIn profile optimization expert and personal branding consultant, optimize the following LinkedIn profile:
+
+**Current Profile:**
+- Current Headline: ${headline}
+- Current About Section: ${about}
+- Target Industry/Roles: ${target}
+
+Please generate an optimized LinkedIn profile (in HTML format), including:
+
+1. **Optimized Headline**
+   - Include job title, professional field, key skills
+   - Use | or • as separators
+   - Make full use of the 220-character limit
+   - Include search keywords
+   - Display in <div class="question-item" style="font-size: 1.1em; font-weight: bold;">
+
+2. **Optimized About Section**
+   - Opening: An engaging self-introduction
+   - Core Competencies: 3-5 professional areas
+   - Skills List: Categorized (core competencies, technical skills, etc.)
+   - Career Highlights: 2-3 quantifiable achievements
+   - Closing: Open to opportunities and contact information
+   - Use <p> and <strong> tags
+   - Line height 1.6
+
+3. **Recommended Hashtags**
+   - 8-10 relevant industry hashtags
+   - Format: #hashtag
+
+4. **Optimization Suggestions**
+   Use <div class="tips"> to include:
+   - Suggestions for optimizing the skills section
+   - Content publishing strategy
+   - Networking expansion advice
+   - 5-7 practical tips
+
+Note:
+- Emphasize keywords related to ${target}
+- Use industry-specific professional terminology
+- Reflect personal brand and value
+- SEO-friendly (to be easily found by search)
+`;
+
+            const systemPrompt = 'You are a LinkedIn optimization expert and personal branding consultant, skilled at creating professional and attractive LinkedIn profiles.';
+
+            try {
+                const aiReply = await callLLM(prompt, systemPrompt);
+                outputDiv.innerHTML = aiReply;
+            } catch (error) {
+                outputDiv.innerHTML = '<p style="color: red;">❌ Generation failed, please check API configuration</p>';
+            }
+        }
+
+        // 6. SALARY INTELLIGENCE - AI-ENHANCED FUNCTIONALITY
+        async function analyzeSalary() {
+            const role = document.getElementById('salary-role').value || 'Software Engineer';
+            const location = document.getElementById('salary-location').value || 'San Francisco, CA';
+            const experience = parseInt(document.getElementById('salary-experience').value) || 3;
+            const companySize = document.getElementById('salary-company').value;
+
+            const outputDiv = document.getElementById('salary-output');
+            outputDiv.innerHTML = '<p>💰 AI is analyzing market salary data...</p>';
+
+            const companySizeText = {
+                'startup': 'Startup (1-50 employees)',
+                'small': 'Small (51-200 employees)',
+                'medium': 'Medium (201-1000 employees)',
+                'large': 'Large (1001-5000 employees)',
+                'enterprise': 'Enterprise (5000+ employees)'
+            }[companySize];
+
+            const prompt = `As a salary negotiation expert and market analyst, analyze the salary for the following position:
+
+**Position Information:**
+- Job Title: ${role}
+- Location: ${location}
+- Years of Experience: ${experience} years
+- Company Size: ${companySizeText}
+
+Please provide a detailed salary analysis report (in HTML format), including:
+
+1. **Salary Estimation**
+   Create 3 <div class="salary-item"> cards showing:
+   - Base Salary (annual range: low-average-high)
+   - Annual Bonus (as a percentage of base salary)
+   - Equity/RSUs (estimated value vesting over 4 years)
+   
+   Each card format:
+   \
+   <div class="salary-item">
+       <div class="salary-value">$XXX,XXX</div>
+       <div>Item Name</div>
+       <small>Additional Info</small>
+   </div>
+   \
+
+2. **Total Compensation**
+   Display using the following style:
+   \
+   <div class="match-score" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+       Total Compensation: $XXX,XXX/year
+   </div>
+   \
+
+3. **Market Positioning Analysis**
+   Include in a <div class="skill-category">:
+   - Geographic Impact (${location} compared to national average)
+   - Experience Premium (${experience} years vs. new graduate)
+   - Company Size Impact (trade-off between base salary vs. equity)
+   - Industry Comparison
+
+4. **Negotiation Strategy**
+   Provide in a <div class="tips">:
+   - Target salary range (considering a 10-15% negotiation buffer)
+   - Equity negotiation advice
+   - Benefits considerations
+   - 5-7 practical negotiation tips
+   - Market trend insights
+
+Notes:
+- All amounts should use USD ($) and thousand separators
+- Salary data should be current for 2024-2025 market conditions
+- Consider the cost of living in ${location}
+- Differentiate salary structures for different company sizes
+- The advice given should be specific and actionable
+
+Add a title before the salary cards:
+<h4>💰 Salary Analysis: ${role}</h4>
+<div class="salary-breakdown">
+[three salary-item cards]
+</div>`;
+
+            const systemPrompt = 'You are a salary negotiation expert and market analyst, specializing in the tech industry compensation structure. Please provide accurate, practical salary analysis and negotiation advice.';
+
+
+            try {
+                const aiReply = await callLLM(prompt, systemPrompt);
+                outputDiv.innerHTML = aiReply;
+            } catch (error) {
+                outputDiv.innerHTML = '<p style="color: red;">❌ Generation failed, please check API configuration</p>';
+            }
+        }
+
+        // UTILITY FUNCTIONS
+        function extractKeywords(text) {
+            if (!text) return ['various', 'skills', 'experience'];
+            const commonWords = ['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by'];
+            return text.toLowerCase()
+                .replace(/[^\w\s]/g, '')
+                .split(/\s+/)
+                .filter(word => word.length > 3 && !commonWords.includes(word))
+                .slice(0, 15);
+        }
+
+        function generateProfessionalSummary(name, currentRole, experience, jobTitle, company, matchedSkills) {
+            return `Accomplished ${currentRole} with ${experience} years of experience seeking ${jobTitle} position at ${company}. Proven expertise in ${matchedSkills.slice(0,3).join(', ')} with track record of delivering innovative solutions and driving business growth. Strong background in full project lifecycle management and cross-functional collaboration.`;
+        }
+
+        function getSkillDescription(skill) {
+            const descriptions = {
+                'python': 'Python programming and development',
+                'javascript': 'JavaScript and modern frameworks',
+                'react': 'React.js and frontend development',
+                'node': 'Node.js and backend services',
+                'aws': 'Amazon Web Services cloud platform',
+                'docker': 'Containerization and DevOps',
+                'machine learning': 'ML algorithms and model development',
+                'data analysis': 'Data processing and insights generation',
+                'project management': 'Project planning and execution',
+                'leadership': 'Team leadership and mentorship'
+            };
+            return descriptions[skill.toLowerCase()] || 'relevant professional skill';
+        }
+
+        function getScoreColor(score) {
+            if (score >= 80) return 'linear-gradient(135deg, #10b981, #34d399)';
+            if (score >= 60) return 'linear-gradient(135deg, #f59e0b, #fbbf24)';
+            return 'linear-gradient(135deg, #ef4444, #f87171)';
+        }
+
+        function exportToPDF() {
+            const element = document.getElementById('resume-output');
+            const opt = {
+                margin: 10,
+                filename: 'optimized_resume.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard!');
+            });
+        }
+
+        // API CONFIGURATION - DeepSeek only
+        const API_CONFIG = {
+            model: 'deepseek-chat'
+        };
+
+        // LLM API CALL - REAL IMPLEMENTATION
+        async function callLLM(prompt, systemPrompt = 'You are a professional career consultant and AI assistant. Please provide valuable and practical advice.') {
+            console.log("Sending request to HF Space backend...");
+
+            const statusIcon = document.getElementById('api-status');
+            
+            // Set status to loading
+            if (statusIcon) statusIcon.textContent = '🔄';
+
+            try {
+                // This is the request body DeepSeek expects.
+                // We build it here and send it to our backend proxy.
+                const requestBody = {
+                    model: API_CONFIG.model,
+                    messages: [
+                        {
+                            role: 'system',
+                            content: systemPrompt
+                        },
+                        {
+                            role: 'user',
+                            content: prompt
+                        }
+                    ],
+                    temperature: 0.7,
+                    stream: false
+                };
+                
+                // Send the request to OUR backend endpoint '/call-deepseek'
+                const response = await fetch('/call-deepseek', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody) // Send the JSON payload
+                });
+
+                if (!response.ok) {
+                    // Get error detail from our FastAPI backend
+                    const errorData = await response.json().catch(() => ({}));
+                    if (statusIcon) statusIcon.textContent = '❌';
+                    throw new Error(errorData.detail || `Server Error ${response.status}: ${response.statusText}`);
+                }
+
+                // The 'data' is the full response from DeepSeek,
+                // proxied through our backend
+                const data = await response.json();
+                
+                if (statusIcon) statusIcon.textContent = '✅';
+                
+                // Extract the AI reply as before
+                let aiReply = data.choices[0].message.content;
+                console.log("AI reply received, length:", aiReply.length);
+
+                return aiReply;
+
+            } catch (error) {
+                if (statusIcon) statusIcon.textContent = '❌';
+                console.error("API call error:", error);
+                
+                alert(`❌ API call failed: ${error.message}\n\nPlease check the server status. If this persists, the app owner may need to check the Hugging Face logs.`);
+                
+                throw error;
+            }
+        }
+
+        // 解析 JSON 响应的辅助函数
+        function parseAIResponse(aiReply) {
+            try {
+                // Clean up possible markdown code block markers
+                let cleaned = aiReply.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+                return JSON.parse(cleaned);
+            } catch (parseError) {
+                console.warn("JSON parsing failed, trying to extract:", parseError);
+                
+                // Try to extract the JSON object
+                const jsonMatch = aiReply.match(/\{[\s\S]*\}/);
+                if (jsonMatch) {
+                    try {
+                        return JSON.parse(jsonMatch[0]);
+                    } catch (e) {
+                        console.error("Secondary parsing failed:", e);
+                    }
+                }
+                
+                // Return the original text
+                return null;
+            }
+        }
+
+        // Initialize with sample data
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Set status to 'Ready'
+            const statusIcon = document.getElementById('api-status');
+            if (statusIcon) statusIcon.textContent = '✅';
+            
+            // Set sample data for demonstration
+            document.getElementById('name').value = 'Alexandra Chen';
+            document.getElementById('current-role').value = 'Senior Frontend Developer';
+            document.getElementById('experience').value = '6';
+            document.getElementById('skills').value = 'React, TypeScript, JavaScript ES6+, Redux, Node.js, RESTful APIs, GraphQL, AWS, Docker, Webpack, Jest, Agile Methodology, Team Leadership, Code Review, Performance Optimization';
+            document.getElementById('job-title').value = 'Principal Frontend Engineer';
+            document.getElementById('company-name').value = 'InnovateTech Solutions';
+            document.getElementById('job-description').value = `We are seeking an experienced Principal Frontend Engineer to lead our frontend development team. The ideal candidate will have 6+ years of experience building scalable web applications and a deep understanding of modern JavaScript frameworks.
+
+Responsibilities:
+- Lead and mentor a team of 8 frontend developers
+- Architect and implement complex frontend systems using React and TypeScript
+- Collaborate with product managers and designers to define technical requirements
+- Optimize applications for maximum performance and scalability
+- Establish and enforce coding standards and best practices
+- Conduct code reviews and provide constructive feedback
+- Drive technical innovation and stay current with industry trends
+
+Requirements:
+- 6+ years of professional frontend development experience
+- Expertise in React, TypeScript, and modern JavaScript
+- Strong experience with state management (Redux, Context API)
+- Proficiency in build tools (Webpack, Babel) and testing frameworks
+- Experience with cloud platforms (AWS, Azure, or GCP)
+- Excellent leadership and communication skills
+- Bachelor's degree in Computer Science or related field`;
+
+            document.getElementById('interview-role').value = 'Senior Full Stack Developer';
+            document.getElementById('interview-skills').value = 'Technical: React, Node.js, PostgreSQL, AWS, Docker, Microservices, System Design\nBehavioral: Team Leadership, Project Management, Conflict Resolution, Stakeholder Communication\nArchitecture: API Design, Database Optimization, Cloud Infrastructure, CI/CD Pipelines';
+            document.getElementById('current-skills').value = 'JavaScript (Advanced), React (Intermediate), HTML/CSS (Advanced), Node.js (Basic), MongoDB (Basic), Git (Intermediate), REST APIs (Intermediate)';
+            document.getElementById('target-role-learning').value = 'Full Stack Developer';
+            document.getElementById('cl-company').value = 'TechNova Innovations';
+            document.getElementById('cl-role').value = 'Senior Software Engineer';
+            document.getElementById('cl-highlight').value = 'Led the development of a customer dashboard that improved user engagement by 45% and reduced loading time by 60%. Implemented React with TypeScript and optimized API calls, resulting in a 30% decrease in server costs. Managed a team of 3 junior developers and introduced code review processes that reduced bugs in production by 25%.';
+            document.getElementById('li-headline').value = 'Frontend Developer at Current Company';
+            document.getElementById('li-about').value = `I'm a frontend developer with experience in React and JavaScript. I enjoy building web applications and solving technical challenges. Looking for new opportunities in tech.`;
+            document.getElementById('li-target').value = 'Tech Leadership, Senior Engineering Roles, FinTech';
+            document.getElementById('salary-role').value = 'Senior Software Engineer';
+            document.getElementById('salary-location').value = 'San Francisco, CA';
+            document.getElementById('salary-experience').value = '6';
+        });
+
+    </script>
+</body>
+</html>

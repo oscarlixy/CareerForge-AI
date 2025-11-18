@@ -1,0 +1,157 @@
+╔═══════════════════════════════════════════════════════════════╗
+║                                                                 ║
+║          🚀 CareerForge AI - 5分钟快速部署                       ║
+║                                                                 ║
+╚═══════════════════════════════════════════════════════════════╝
+
+
+📋 准备工作（5分钟）
+════════════════════════════════════════════════════════════════
+
+1️⃣  注册 Hugging Face 账号
+   访问：https://huggingface.co/join
+   填写邮箱、用户名、密码 → 验证邮箱 → 完成
+
+2️⃣  注册 DeepSeek 账号并获取 API Key
+   访问：https://platform.deepseek.com
+   注册登录 → API Keys → 创建新密钥 → 复制保存
+   记得充值 ¥10-20
+
+3️⃣  获取 Hugging Face Access Token
+   访问：https://huggingface.co/settings/tokens
+   New token → 选择 write 权限 → Generate → 复制保存
+
+
+🚀 方法一：一键部署（最简单！）
+════════════════════════════════════════════════════════════════
+
+步骤 1：先在 HF 创建 Space
+   访问：https://huggingface.co/new-space
+   SDK 选择：Docker ⚠️（必须）
+   点击：Create Space
+
+步骤 2：运行一键脚本
+   打开终端，进入本文件夹：
+   cd /path/to/CareerForge-完整代码包
+   
+   运行脚本：
+   ./一键部署.sh
+   
+   按提示输入：
+   • HF 用户名
+   • Space 名称
+   • HF Token（推送时）
+
+步骤 3：配置 API Key
+   访问：https://huggingface.co/spaces/你的用户名/space名/settings
+   
+   Secrets → New secret → 填写：
+   Name:  DEEPSEEK_API_KEY
+   Value: sk-你的密钥
+   
+   点击 Add
+
+步骤 4：等待构建（3-5分钟）
+   在 App 标签查看进度
+
+步骤 5：开始使用！🎉
+
+
+🌐 方法二：网页上传（无需命令行）
+════════════════════════════════════════════════════════════════
+
+步骤 1：创建 Space
+   https://huggingface.co/new-space
+   SDK: Docker → Create
+
+步骤 2：上传文件
+   Files → Add file → Upload files
+   依次上传：
+   • README.md
+   • app.py
+   • requirements.txt
+   • Dockerfile
+   → Commit changes
+
+步骤 3：上传 static/index.html
+   Add file → Create a new file
+   文件名：static/index.html
+   粘贴代码 → Commit
+
+步骤 4：配置 API Key
+   Settings → Secrets → New secret
+   Name: DEEPSEEK_API_KEY
+   Value: sk-xxxxx
+
+步骤 5：等待 & 使用
+
+
+📂 文件结构
+════════════════════════════════════════════════════════════════
+
+CareerForge-完整代码包/
+├── app.py               ← 后端服务器
+├── requirements.txt     ← 依赖列表
+├── Dockerfile           ← 容器配置
+├── README.md            ← Space 说明
+├── static/
+│   └── index.html       ← 前端应用
+├── 一键部署.sh           ← 自动部署脚本
+├── 快速开始.txt          ← 本文件
+└── README.txt           ← 详细说明
+
+
+⚠️  关键注意事项
+════════════════════════════════════════════════════════════════
+
+✅ SDK 必须选择 "Docker"
+✅ Secret 名称必须是 "DEEPSEEK_API_KEY"
+✅ index.html 必须在 static 文件夹里
+✅ DeepSeek 账户必须有余额
+✅ HF Token 需要 write 权限
+
+
+🎯 成功标志
+════════════════════════════════════════════════════════════════
+
+构建成功：
+Logs 显示 "Uvicorn running on http://0.0.0.0:7860"
+
+功能正常：
+填写信息 → 点击生成 → 等待30-60秒 → 看到结果
+
+
+❓ 遇到问题？
+════════════════════════════════════════════════════════════════
+
+1. 查看详细教程：CareerForge-AI完整部署指南.md
+2. 检查 Logs 标签的错误信息
+3. 确认所有步骤都正确完成
+
+
+📞 常用链接
+════════════════════════════════════════════════════════════════
+
+创建 Space：
+https://huggingface.co/new-space
+
+获取 Token：
+https://huggingface.co/settings/tokens
+
+DeepSeek 控制台：
+https://platform.deepseek.com
+
+HF 文档：
+https://huggingface.co/docs/hub/spaces
+
+
+════════════════════════════════════════════════════════════════
+
+选择你喜欢的方式开始部署吧！
+
+推荐：使用一键脚本，最快最简单！
+
+祝你部署顺利！🚀✨
+
+════════════════════════════════════════════════════════════════
+
