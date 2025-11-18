@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerForge AI - Complete Career Platform</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        /* Previous CSS styles remain the same */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .tabs {
+            display: flex;
+            background: var(--background);
+            border-bottom: 1px solid #e2e8f0;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            padding: 20px 30px;
+            background: none;
+            border: none;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-button:hover {
+            color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .tab-button.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 40px;
+            min-height: 600px;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-section {
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .form-section h3 {
+            margin-bottom: 20px;
+            color: var(--primary);
+            font-size: 1.3em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .output-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .output-box {
+            background: var(--surface);
+            border: 1px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 25px;
+            min-height: 400px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .output-box h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .resume-content {
+            line-height: 1.6;
+        }
+
+        .resume-content h1 {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .match-score {
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--success), #34d399);
+            color: white;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .question-item {
+            background: #f8fafc;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .skill-category {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f0f9ff;
+            border-radius: 10px;
+        }
+
+        .salary-breakdown {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .salary-item {
+            text-align: center;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 10px;
+        }
+
+        .salary-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .form-grid, .output-grid {
+                grid-template-columns: 1fr;
+            }
+            .salary-breakdown {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 CareerForge AI</h1>
+            <p>Your All-in-One Intelligent Career Platform</p>
+            
+            <!-- API Configuration -->
+            <div style="margin-top: 25px; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; max-width: 700px; margin-left: auto; margin-right: auto;">
+                <div style="font-size: 0.95em; opacity: 0.95; line-height: 1.5; text-align: center;">
+                    💡 This platform is powered by AI. All features are now active.
+                    <span id="api-status" style="font-size: 1.2em; margin-left: 10px;">⚪</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab('resume-tab')">🎯 Smart Resume</button>
+            <button class="tab-button" onclick="openTab('interview-tab')">💼 Interview Coach</button>
+            <button class="tab-button" onclick="openTab('skills-tab')">📚 Learning Path</button>
+            <button class="tab-button" onclick="openTab('coverletter-tab')">✉️ Cover Letters</button>
+            <button class="tab-button" onclick="openTab('linkedin-tab')">💼 LinkedIn</button>
+            <button class="tab-button" onclick="openTab('salary-tab')">💰 Salary Intel</button>
+        </div>
+
+        <!-- Resume Optimizer Tab -->
+        <div id="resume-tab" class="tab-content active">
+            <div class="form-grid">
+                <div class="form-section">
+                    <h3>👤 Your Profile</h3>
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="current-role">Current Role</label>
+                        <input type="text" id="current-role" placeholder="Software Developer">
+                    </div>
+                    <div class="form-group">
+                        <label for="experience">Years of Experience</label>
+                        <input type="number" id="experience" placeholder="5">
+                    </div>
+                    <div class="form-group">
+                        <label for="skills">Skills (comma separated)</label>
+                        <textarea id="skills" placeholder="Python, Project Management, Data Analysis..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>🎯 Target Opportunity</h3>
+                    <div class="form-group">
+                        <label for="job-title">Desired Job Title</label>
+                        <input type="text" id="job-title" placeholder="Senior Software Engineer">
+                    </div>
+                    <div class="form-group">
+                        <label for="job-description">Job Description</label>
+                        <textarea id="job-description" placeholder="Paste the job description here..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="company-name">Company Name</label>
+                        <input type="text" id="company-name" placeholder="Tech Company Inc.">
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="generateResume()">🚀 Generate Optimized Resume</button>
+
+            <div class="output-grid">
+                <div class="output-box">
+                    <h3>📄 AI-Optimized Resume</h3>
+                    <div id="resume-output" class="resume-content"></div>
+                </div>
+                <div class="output-box">
+                    <h3>📊 Matching Analysis</h3>
+                    <div id="analysis-output"></div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-success" onclick="exportToPDF()">📥 Export as PDF</button>
+                <button class="btn btn-secondary" onclick="copyToClipboard('resume-output')">📋 Copy Text</button>
+            </div>
+        </div>
+
+        <!-- Interview Coach Tab -->
+        <div id="interview-tab" class="tab-content">
+            <div class="form-grid">
+                <div class="form-section">
+                    <h3>🎯 Interview Setup</h3>
+                    <div class="form-group">
+                        <label for="interview-role">Target Role</label>
+                        <input type="text" id="interview-role" placeholder="Senior Developer">
+                    </div>
+                    <div class="form-group">
+                        <label for="interview-level">Experience Level</label>
+                        <select id="interview-level">
+                            <option value="entry">Entry Level</option>
+                            <option value="mid">Mid Level</option>
+                            <option value="senior">Senior Level</option>
+                            <option value="lead">Lead/Manager</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="interview-skills">Key Skills to Test</label>
+                        <textarea id="interview-skills" placeholder="Python, System Design, Leadership..."></textarea>
+                    </div>
+                    <button class="btn btn-primary" onclick="generateInterviewQuestions()">🎯 Generate Questions</button>
+                </div>
+
+                <div class="form-section">
+                    <h3>💡 Interview Results</h3>
+                    <div id="interview-output"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Learning Path Tab -->
+        <div id="skills-tab" class="tab-content">
+            <div class="form-grid">
+                <div class="form-section">
+                    <h3>📚 Skill Assessment</h3>
+                    <div class="form-group">
+                        <label for="current-skills">Current Skills</label>
+                        <textarea id="current-skills" placeholder="List your current skills..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="target-role-learning">Target Role</label>
+                        <input type="text" id="target-role-learning" placeholder="AI Engineer">
+                    </div>
+                    <div class="form-group">
+                        <label for="timeline">Learning Timeline</label>
+                        <select id="timeline">
+                            <option value="3">3 months</option>
+                            <option value="6">6 months</option>
+                            <option value="12">1 year</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="generateLearningPath()">🛠️ Create Learning Path</button>
+                </div>
+
+                <div class="form-section">
+                    <h3>🎯 Personalized Roadmap</h3>
+                    <div id="learning-output"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cover Letter Tab -->
+        <div id="coverletter-tab" class="tab-content">
+            <div class="form-grid">
+                <div class="form-section">
+                    <h3>✉️ Letter Details</h3>
+                    <div class="form-group">
+                        <label for="cl-company">Company Name</label>
+                        <input type="text" id="cl-company" placeholder="Tech Innovations Inc.">
+                    </div>
+                    <div class="form-group">
+                        <label for="cl-role">Job Title</label>
+                        <input type="text" id="cl-role" placeholder="Senior Developer">
+                    </div>
+                    <div class="form-group">
+                        <label for="cl-highlight">Key Achievement to Highlight</label>
+                        <textarea id="cl-highlight" placeholder="Describe your most relevant achievement..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="cl-tone">Writing Tone</label>
+                        <select id="cl-tone">
+                            <option value="professional">Professional</option>
+                            <option value="enthusiastic">Enthusiastic</option>
+                            <option value="formal">Formal</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="generateCoverLetter()">✨ Generate Cover Letter</button>
+                </div>
+
+                <div class="form-section">
+                    <h3>📝 Custom Cover Letter</h3>
+                    <div id="coverletter-output"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LinkedIn Optimizer Tab -->
+        <div id="linkedin-tab" class="tab-content">
+            <div class="form-grid">
+                <div class="form-section">
+                    <h3>💼 Profile Information</h3>
+                    <div class="form-group">
+                        <label for="li-headline">Current Headline</label>
+                        <input type="text" id="li-headline" placeholder="Software Developer at Current Company">
+                    </div>
+                    <div class="form-group">
+                        <label for="li-about">Current About Section</label>
+                        <textarea id="li-about" placeholder="Your current LinkedIn summary..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="li-target">Target Industry/Roles</label>
+                        <input type="text" id="li-target" placeholder="AI Engineering, Tech Leadership">
+                    </div>
+                    <button class="btn btn-primary" onclick="optimizeLinkedIn()">🚀 Optimize Profile</button>
+                </div>
+
+                <div class="form-section">
+                    <h3>🎯 Optimized Results</h3>
+                    <div id="linkedin-output"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Salary Intelligence Tab -->
+        <div id="salary-tab" class="tab-content">
+            <div class="form-grid">
+                <div class="form-section">
+                    <h3>💰 Salary Research</h3>
+                    <div class="form-group">
+                        <label for="salary-role">Job Title</label>
+                        <input type="text" id="salary-role" placeholder="Senior Software Engineer">
+                    </div>
+                    <div class="form-group">
+                        <label for="salary-location">Location</label>
+                        <input type="text" id="salary-location" placeholder="San Francisco, CA or Remote">
+                    </div>
+                    <div class="form-group">
+                        <label for="salary-experience">Years of Experience</label>
+                        <input type="number" id="salary-experience" placeholder="5">
+                    </div>
+                    <div class="form-group">
+                        <label for="salary-company">Company Size</label>
+                        <select id="salary-company">
+                            <option value="startup">Startup (1-50)</option>
+                            <option value="small">Small (51-200)</option>
+                            <option value="medium">Medium (201-1000)</option>
+                            <option value="large">Large (1001-5000)</option>
+                            <option value="enterprise">Enterprise (5000+)</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="analyzeSalary()">💡 Get Salary Insights</button>
+                </div>
+
+                <div class="form-section">
+                    <h3>📊 Market Intelligence</h3>
+                    <div id="salary-output"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab navigation
+        function openTab(tabName) {
+            const tabContents = document.getElementsByClassName('tab-content');
+            const tabButtons = document.getElementsByClassName('tab-button');
+            
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+                tabButtons[i].classList.remove('active');
+            }
+
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // 1. RESUME OPTIMIZER
+        async function generateResume() {
+            const resumeData = {
+                name: document.getElementById('name').value || 'Your Name',
+                currentRole: document.getElementById('current-role').value || 'Professional',
+                experience: document.getElementById('experience').value || '3',
+                skills: document.getElementById('skills').value || 'Various skills',
+                jobTitle: document.getElementById('job-title').value || 'Target Role',
+                company: document.getElementById('company-name').value || 'Target Company',
+                jobDescription: document.getElementById('job-description').value
+            };
+
+            const resumeOutput = document.getElementById('resume-output');
+            const analysisOutput = document.getElementById('analysis-output');
+            resumeOutput.innerHTML = '<p>🚀 Contacting AI Agent to generate content...</p>';
+            analysisOutput.innerHTML = '<p>📊 Analyzing your profile against the job...</p>';
+
+            try {
+                const aiReply = await callAIAgent('resume', resumeData);
+                const llmResponse = parseAIResponse(aiReply);
+                
+                if (llmResponse && llmResponse.resume && llmResponse.analysis) {
+                    resumeOutput.innerHTML = llmResponse.resume;
+                    analysisOutput.innerHTML = llmResponse.analysis;
+                } else {
+                    resumeOutput.innerHTML = `<div style="line-height: 1.6;">${aiReply.replace(/\n/g, '<br>')}</div>`;
+                    analysisOutput.innerHTML = '<p>✅ Resume generated (format may need adjustment)</p>';
+                }
+            } catch (error) {
+                resumeOutput.innerHTML = '<p style="color: red;">❌ Generation failed, please check server logs.</p>';
+                analysisOutput.innerHTML = '<p style="color: red;">❌ Generation failed</p>';
+            }
+        }
+
+        // 2. INTERVIEW COACH
+        async function generateInterviewQuestions() {
+            const interviewData = {
+                role: document.getElementById('interview-role').value || 'Developer',
+                level: document.getElementById('interview-level').value,
+                skills: document.getElementById('interview-skills').value || 'Relevant Skills'
+            };
+            const outputDiv = document.getElementById('interview-output');
+            outputDiv.innerHTML = '<p>🤔 AI Agent is generating customized interview questions...</p>';
+
+            try {
+                const aiReply = await callAIAgent('interview', interviewData);
+                outputDiv.innerHTML = aiReply;
+            } catch (error) {
+                outputDiv.innerHTML = '<p style="color: red;">❌ Generation failed, please check server logs.</p>';
+            }
+        }
+
+        // 3. LEARNING PATH
+        async function generateLearningPath() {
+            const learningData = {
+                currentSkills: document.getElementById('current-skills').value || 'Basic Skills',
+                targetRole: document.getElementById('target-role-learning').value || 'Full Stack Developer',
+                timeline: parseInt(document.getElementById('timeline').value)
+            };
+            const outputDiv = document.getElementById('learning-output');
+            outputDiv.innerHTML = '<p>📚 AI Agent is planning a personalized learning path...</p>';
+
+            try {
+                const aiReply = await callAIAgent('learning_path', learningData);
+                outputDiv.innerHTML = aiReply;
+            } catch (error) {
+                outputDiv.innerHTML = '<p style="color: red;">❌ Generation failed, please check server logs.</p>';
+            }
+        }
+
+        // 4. COVER LETTER GENERATOR
+        async function generateCoverLetter() {
+            const letterData = {
+                company: document.getElementById('cl-company').value || 'Target Company',
+                role: document.getElementById('cl-role').value || 'Target Role',
+                achievement: document.getElementById('cl-highlight').value || 'My work experience and achievements',
+                tone: document.getElementById('cl-tone').value
+            };
+            const outputDiv = document.getElementById('coverletter-output');
+            outputDiv.innerHTML = '<p>✍️ AI Agent is writing a personalized cover letter...</p>';
+
+            try {
+                const aiReply = await callAIAgent('cover_letter', letterData);
+                outputDiv.innerHTML = aiReply;
+            } catch (error) {
+                outputDiv.innerHTML = '<p style="color: red;">❌ Generation failed, please check server logs.</p>';
+            }
+        }
+
+        // 5. LINKEDIN OPTIMIZER
+        async function optimizeLinkedIn() {
+            const linkedinData = {
+                headline: document.getElementById('li-headline').value || 'Current Professional',
+                about: document.getElementById('li-about').value || 'Experienced professional seeking new opportunities',
+                target: document.getElementById('li-target').value || 'Technology field'
+            };
+            const outputDiv = document.getElementById('linkedin-output');
+            outputDiv.innerHTML = '<p>💼 AI Agent is optimizing your LinkedIn profile...</p>';
+
+            try {
+                const aiReply = await callAIAgent('linkedin', linkedinData);
+                outputDiv.innerHTML = aiReply;
+            } catch (error) {
+                outputDiv.innerHTML = '<p style="color: red;">❌ Generation failed, please check server logs.</p>';
+            }
+        }
+
+        // 6. SALARY INTELLIGENCE
+        async function analyzeSalary() {
+            const salaryData = {
+                role: document.getElementById('salary-role').value || 'Software Engineer',
+                location: document.getElementById('salary-location').value || 'San Francisco, CA',
+                experience: parseInt(document.getElementById('salary-experience').value) || 3,
+                companySize: document.getElementById('salary-company').value
+            };
+            const outputDiv = document.getElementById('salary-output');
+            outputDiv.innerHTML = '<p>💰 AI Agent is analyzing market salary data...</p>';
+
+            try {
+                const aiReply = await callAIAgent('salary', salaryData);
+                outputDiv.innerHTML = aiReply;
+            } catch (error) {
+                outputDiv.innerHTML = '<p style="color: red;">❌ Generation failed, please check server logs.</p>';
+            }
+        }
+
+        // UTILITY FUNCTIONS
+        function exportToPDF() {
+            const element = document.getElementById('resume-output');
+            const opt = {
+                margin: 10,
+                filename: 'optimized_resume.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard!');
+            });
+        }
+
+        // LLM API CALL - NEW AGENT IMPLEMENTATION
+        async function callAIAgent(task, data) {
+            console.log(`Sending task '${task}' to AI agent backend...`);
+            const statusIcon = document.getElementById('api-status');
+            if (statusIcon) statusIcon.textContent = '🔄';
+
+            try {
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ task, data })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ detail: `Server Error ${response.status}: ${response.statusText}` }));
+                    if (statusIcon) statusIcon.textContent = '❌';
+                    throw new Error(errorData.detail);
+                }
+
+                const responseData = await response.json();
+                if (statusIcon) statusIcon.textContent = '✅';
+                
+                console.log("AI Agent reply received, length:", responseData.content.length);
+                return responseData.content;
+
+            } catch (error) {
+                if (statusIcon) statusIcon.textContent = '❌';
+                console.error("Agent call error:", error);
+                alert(`❌ Agent call failed: ${error.message}\n\nPlease check the server status and logs.`);
+                throw error;
+            }
+        }
+
+        // Parse JSON response from AI
+        function parseAIResponse(aiReply) {
+            try {
+                let cleaned = aiReply.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+                return JSON.parse(cleaned);
+            } catch (parseError) {
+                console.warn("JSON parsing failed, trying to extract:", parseError);
+                const jsonMatch = aiReply.match(/\{[\s\S]*\}/);
+                if (jsonMatch) {
+                    try {
+                        return JSON.parse(jsonMatch[0]);
+                    } catch (e) {
+                        console.error("Secondary parsing failed:", e);
+                    }
+                }
+                return null;
+            }
+        }
+
+        // Initialize with sample data
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusIcon = document.getElementById('api-status');
+            if (statusIcon) statusIcon.textContent = '✅';
+            
+            document.getElementById('name').value = 'Alexandra Chen';
+            document.getElementById('current-role').value = 'Senior Frontend Developer';
+            document.getElementById('experience').value = '6';
+            document.getElementById('skills').value = 'React, TypeScript, JavaScript ES6+, Redux, Node.js, RESTful APIs, GraphQL, AWS, Docker, Webpack, Jest, Agile Methodology, Team Leadership, Code Review, Performance Optimization';
+            document.getElementById('job-title').value = 'Principal Frontend Engineer';
+            document.getElementById('company-name').value = 'InnovateTech Solutions';
+            document.getElementById('job-description').value = `We are seeking an experienced Principal Frontend Engineer to lead our frontend development team. The ideal candidate will have 6+ years of experience building scalable web applications and a deep understanding of modern JavaScript frameworks.
+
+Responsibilities:
+- Lead and mentor a team of 8 frontend developers
+- Architect and implement complex frontend systems using React and TypeScript
+- Collaborate with product managers and designers to define technical requirements
+- Optimize applications for maximum performance and scalability
+- Establish and enforce coding standards and best practices
+- Conduct code reviews and provide constructive feedback
+- Drive technical innovation and stay current with industry trends
+
+Requirements:
+- 6+ years of professional frontend development experience
+- Expertise in React, TypeScript, and modern JavaScript
+- Strong experience with state management (Redux, Context API)
+- Proficiency in build tools (Webpack, Babel) and testing frameworks
+- Experience with cloud platforms (AWS, Azure, or GCP)
+- Excellent leadership and communication skills
+- Bachelor's degree in Computer Science or related field`;
+
+            document.getElementById('interview-role').value = 'Senior Full Stack Developer';
+            document.getElementById('interview-skills').value = 'Technical: React, Node.js, PostgreSQL, AWS, Docker, Microservices, System Design\nBehavioral: Team Leadership, Project Management, Conflict Resolution, Stakeholder Communication\nArchitecture: API Design, Database Optimization, Cloud Infrastructure, CI/CD Pipelines';
+            document.getElementById('current-skills').value = 'JavaScript (Advanced), React (Intermediate), HTML/CSS (Advanced), Node.js (Basic), MongoDB (Basic), Git (Intermediate), REST APIs (Intermediate)';
+            document.getElementById('target-role-learning').value = 'Full Stack Developer';
+            document.getElementById('cl-company').value = 'TechNova Innovations';
+            document.getElementById('cl-role').value = 'Senior Software Engineer';
+            document.getElementById('cl-highlight').value = 'Led the development of a customer dashboard that improved user engagement by 45% and reduced loading time by 60%. Implemented React with TypeScript and optimized API calls, resulting in a 30% decrease in server costs. Managed a team of 3 junior developers and introduced code review processes that reduced bugs in production by 25%.';
+            document.getElementById('li-headline').value = 'Frontend Developer at Current Company';
+            document.getElementById('li-about').value = `I'm a frontend developer with experience in React and JavaScript. I enjoy building web applications and solving technical challenges. Looking for new opportunities in tech.`;
+            document.getElementById('li-target').value = 'Tech Leadership, Senior Engineering Roles, FinTech';
+            document.getElementById('salary-role').value = 'Senior Software Engineer';
+            document.getElementById('salary-location').value = 'San Francisco, CA';
+            document.getElementById('salary-experience').value = '6';
+        });
+    </script>
+</body>
+</html>
